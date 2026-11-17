@@ -8,7 +8,6 @@ interface ModalProps {
   children: ReactNode;
 }
 
-/** Диалог на нативном <dialog>: Escape, ловушка фокуса и возврат фокуса обеспечивает браузер. */
 export function Modal({ open, title, onClose, children }: ModalProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();

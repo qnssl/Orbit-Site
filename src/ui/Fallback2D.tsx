@@ -8,7 +8,6 @@ interface FallbackProps {
   onSelect: (id: BodyId) => void;
 }
 
-/** Двумерный обзор для случаев, когда WebGL недоступен. Это запасной режим, а не основная сцена. */
 export function Fallback2D({ reason, selectedId, onSelect }: FallbackProps) {
   const maxR = 56;
   const scale = 54 / maxR;

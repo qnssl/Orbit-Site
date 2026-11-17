@@ -23,36 +23,22 @@ export interface Body {
   name: string;
   kind: BodyKind;
   description: string;
-  /** Цвет метки в интерфейсе (не физическая характеристика). */
   swatch: string;
-  /** Средний радиус, км. */
   radiusKm: number;
-  /** Среднее расстояние от Солнца (большая полуось), млн км. */
   distanceMlnKm: number | null;
-  /** Среднее расстояние от Солнца, а.е. */
   distanceAu: number | null;
-  /** Сидерический период обращения вокруг Солнца, земных суток. */
   orbitalPeriodDays: number | null;
-  /** Период вращения вокруг оси, часов. Отрицательное значение — обратное вращение. */
   rotationPeriodHours: number;
-  /** Наклон оси, градусы. */
   axialTiltDeg: number;
-  /** Ускорение свободного падения на «поверхности» (для гигантов — на уровне 1 бар), м/с². */
   gravityMs2: number;
-  /** Средняя температура (текстом, с пояснением уровня). */
   temperature: string;
-  /** Спутники (приблизительно, число уточняется). */
   moons: string;
-  /** Параметры визуальной модели — условные, не физические. */
   visual: {
     radius: number;
     orbitRadius: number;
-    /** Начальная фаза орбиты, радианы (условная). */
     phase: number;
     hasRings?: boolean;
-    /** Свечение атмосферы (стилизованное): цвет, яркость и размер оболочки относительно радиуса. */
     atmosphere?: { color: string; intensity: number; scale: number };
-    /** Сила рельефа (bump) для каменистых тел. */
     bump?: number;
   };
 }
@@ -233,7 +219,6 @@ export const BODY_BY_ID: Record<BodyId, Body> = BODIES.reduce(
 );
 
 export interface SpeedOption {
-  /** Суток модели в секунду реального времени. */
   value: number;
 }
 

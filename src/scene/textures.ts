@@ -5,8 +5,6 @@ type RGB = [number, number, number];
 type RGBA = [number, number, number, number];
 type Shader = (lon: number, lat: number, x: number, y: number, z: number) => RGB | RGBA;
 
-/* ---------- Шум на сфере (бесшовный по долготе) ---------- */
-
 function hash3(x: number, y: number, z: number, seed: number): number {
   let h =
     Math.imul(x | 0, 374761393) ^
@@ -26,7 +24,6 @@ const sstep = (a: number, b: number, v: number): number => {
   return t * t * (3 - 2 * t);
 };
 const mixc = (a: RGB, b: RGB, t: number): RGB => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
-/** Усиление контраста вокруг 0.5. */
 const ct = (n: number): number => clamp01((n - 0.5) * 1.8 + 0.5);
 
 function noise3(x: number, y: number, z: number, seed: number): number {
@@ -65,8 +62,6 @@ function fbm(x: number, y: number, z: number, seed: number, octaves = 4): number
   return sum / norm;
 }
 
-/* ---------- Генерация canvas-текстуры ---------- */
-
 function makeCanvasTexture(w: number, h: number, shader: Shader): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = w;
@@ -99,8 +94,6 @@ function makeCanvasTexture(w: number, h: number, shader: Shader): THREE.CanvasTe
   tex.anisotropy = 4;
   return tex;
 }
-
-/* ---------- Шейдеры поверхностей ---------- */
 
 const sun: Shader = (_lon, _lat, x, y, z) => {
   const n = ct(fbm(x * 3, y * 3, z * 3, 21, 5));
@@ -230,8 +223,6 @@ export function getCloudTexture(lowPower: boolean): THREE.CanvasTexture {
   return tex;
 }
 
-/* ---------- Кольца Сатурна ---------- */
-
 export function getRingTexture(): THREE.CanvasTexture {
   const hit = cache.get('ring');
   if (hit) return hit;
@@ -263,7 +254,6 @@ export function getRingTexture(): THREE.CanvasTexture {
   return tex;
 }
 
-/** RingGeometry с UV по радиусу — чтобы градиентная текстура шла от внутреннего края к внешнему. */
 export function makeRingGeometry(inner: number, outer: number, segments: number): THREE.RingGeometry {
   const g = new THREE.RingGeometry(inner, outer, segments, 1);
   const pos = g.attributes.position;
@@ -275,8 +265,6 @@ export function makeRingGeometry(inner: number, outer: number, segments: number)
   }
   return g;
 }
-
-/* ---------- Свечение Солнца ---------- */
 
 export function getGlowTexture(): THREE.CanvasTexture {
   const hit = cache.get('glow');

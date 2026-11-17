@@ -28,8 +28,6 @@ export interface SolarSceneProps {
   onFail: () => void;
 }
 
-/* ---------- Часы модели ---------- */
-
 function ClockDriver({ paused, speed }: { paused: boolean; speed: number }) {
   const acc = useRef(0);
   useFrame((_, delta) => {
@@ -45,13 +43,11 @@ function ClockDriver({ paused, speed }: { paused: boolean; speed: number }) {
   return null;
 }
 
-/* ---------- Выбор объекта ---------- */
-
 function usePick(id: BodyId, onSelect: (id: BodyId) => void) {
   return useMemo(
     () => ({
       onClick: (e: ThreeEvent<MouseEvent>) => {
-        if (e.delta > 4) return; // это было перетаскивание, а не клик
+        if (e.delta > 4) return;
         e.stopPropagation();
         onSelect(id);
       },
@@ -77,9 +73,7 @@ function Label({ body, selected, onSelect, y }: { body: Body; selected: boolean;
   );
 }
 
-/* ---------- Атмосферное свечение (стилизованный fresnel) ---------- */
-
-const ATMO_VERT = /* glsl */ `
+const ATMO_VERT = `
   varying vec3 vNormal;
   varying vec3 vView;
   void main() {
@@ -90,7 +84,7 @@ const ATMO_VERT = /* glsl */ `
   }
 `;
 
-const ATMO_FRAG = /* glsl */ `
+const ATMO_FRAG = `
   uniform vec3 uColor;
   uniform float uIntensity;
   varying vec3 vNormal;
@@ -121,8 +115,6 @@ function Atmosphere({ radius, color, intensity, scale, segments }: { radius: num
   );
 }
 
-/* ---------- Пульсирующая рамка выбранного тела ---------- */
-
 function SelectionRing({ radius, reducedMotion }: { radius: number; reducedMotion: boolean }) {
   const ref = useRef<THREE.Mesh>(null);
   const mat = useRef<THREE.MeshBasicMaterial>(null);
@@ -146,8 +138,6 @@ function SelectionRing({ radius, reducedMotion }: { radius: number; reducedMotio
   );
 }
 
-/* ---------- Луна (декоративный элемент у Земли) ---------- */
-
 const MOON_PERIOD_DAYS = 27.3;
 
 function Moon({ lowPower }: { lowPower: boolean }) {
@@ -164,8 +154,6 @@ function Moon({ lowPower }: { lowPower: boolean }) {
     </mesh>
   );
 }
-
-/* ---------- Солнце ---------- */
 
 function Sun({
   selected,
@@ -215,8 +203,6 @@ function Sun({
   );
 }
 
-/* ---------- Планета ---------- */
-
 function Planet({
   body,
   registry,
@@ -248,7 +234,6 @@ function Planet({
   const initial = useMemo<[number, number, number]>(() => {
     const a = orbitAngle(body, clock.days);
     return [Math.cos(a) * v.orbitRadius, 0, -Math.sin(a) * v.orbitRadius];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [body]);
   const pick = usePick(body.id, onSelect);
   const seg = lowPower ? 32 : 56;
@@ -326,8 +311,6 @@ function Planet({
   );
 }
 
-/* ---------- Орбиты ---------- */
-
 function OrbitLine({ radius, selected, visible }: { radius: number; selected: boolean; visible: boolean }) {
   const geo = useMemo(() => {
     const pts: THREE.Vector3[] = [];
@@ -347,8 +330,6 @@ function OrbitLine({ radius, selected, visible }: { radius: number; selected: bo
     </lineLoop>
   );
 }
-
-/* ---------- Звёзды ---------- */
 
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
@@ -403,8 +384,6 @@ function Starfield({ count, reducedMotion }: { count: number; reducedMotion: boo
   );
 }
 
-/* ---------- Камера ---------- */
-
 function CameraRig({
   selectedId,
   homeToken,
@@ -418,7 +397,6 @@ function CameraRig({
 }) {
   const controls = useRef<ElementRef<typeof OrbitControls>>(null);
   const camera = useThree((s) => s.camera);
-  // При старте камера плавно «влетает» в общий вид (без анимации при уменьшенном движении).
   const mode = useRef<'free' | 'focus' | 'home'>(reducedMotion ? 'free' : 'home');
   const zoomAnim = useRef(false);
   const desiredDist = useRef(20);
@@ -496,8 +474,6 @@ function CameraRig({
     />
   );
 }
-
-/* ---------- Сцена ---------- */
 
 export default function SolarScene(props: SolarSceneProps) {
   const { selectedId, onSelect, paused, speed, showOrbits, showLabels, homeToken, lowPower, reducedMotion, onFail } = props;

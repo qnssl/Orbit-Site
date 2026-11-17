@@ -1,6 +1,5 @@
 import type { Body } from '../data/bodies';
 
-/** Единые часы модели. Мутируются из useFrame, React-состояние на каждом кадре не обновляется. */
 export const clock = { days: 0 };
 
 type Listener = () => void;
@@ -22,7 +21,6 @@ function notify(): void {
   listeners.forEach((l) => l());
 }
 
-/** Публикует округлённое время подписчикам интерфейса (вызывается редко). */
 export function publishClock(): void {
   const next = Math.floor(clock.days);
   if (next !== snapshot) {
@@ -39,7 +37,6 @@ export function resetClock(): void {
 
 export const TAU = Math.PI * 2;
 
-/** Доля реального пропорционального вращения вокруг оси, показываемая на экране (условно). */
 export const SPIN_FACTOR = 0.03;
 
 export function orbitAngle(body: Body, days: number): number {
