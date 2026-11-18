@@ -141,6 +141,10 @@ export default function App() {
           <button type="button" className="btn" onClick={() => setHelpOpen(true)}>
             Справка
           </button>
+          <a className="btn" href="https://github.com/qnssl" target="_blank" rel="noopener noreferrer">
+            GitHub
+            <span className="sr-only"> (откроется в новой вкладке)</span>
+          </a>
         </div>
       </header>
 
